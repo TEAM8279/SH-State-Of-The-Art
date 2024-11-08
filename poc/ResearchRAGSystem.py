@@ -34,7 +34,7 @@ class ResearchRAGSystem:
                 for page in reader.pages:
                     text += page.extract_text()
             return text
-        except PyPDF2.errors.PdfReadError as e:
+        except PyPDF2.errors.PdfReadError:
             print(f"Error reading PDF: {pdf_path}. Skipping...")
             return ""
 
