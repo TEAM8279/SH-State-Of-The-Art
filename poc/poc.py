@@ -1,5 +1,8 @@
 from ResearchRAGSystem import ResearchRAGSystem
 import os
+from langchain_ollama import OllamaLLM
+
+llm = OllamaLLM(model="llama3.1:8b")
 
 
 DATA_PATH = "../data/"
@@ -17,11 +20,15 @@ for paper in os.listdir(PDF_PATH)[:max]:
         print(f"Added paper ({count}): {paper}")
         count += 1
 
-
+print("All papers added")
+print("Prompt generation started")
 query = "What are the latest advances in SVM?"
 prompt = rag_system.generate_llm_prompt(query)
+print("Prompt generated")
 
-print("-----------------------------------------------------")
-print("Generated prompt:")
-print("-----------------------------------------------------")
-print(prompt)
+
+response = llm.invoke(prompt)
+print("-------------------------------------------------")
+print("Response")
+print("-------------------------------------------------")
+print(response)

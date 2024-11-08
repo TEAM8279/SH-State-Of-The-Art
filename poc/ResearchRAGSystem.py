@@ -25,6 +25,7 @@ class ResearchRAGSystem:
         self.embeddings: np.ndarray = None
         self.embeddings_path = embeddings_path
         self._load_embeddings()
+        self.load_papers()
 
     def extract_text_from_pdf(self, pdf_path: str) -> str:
         try:
@@ -44,11 +45,27 @@ class ResearchRAGSystem:
             content=text,
         )
 
+    def _save_papers(self):
+        with open("papers.pkl", "wb") as file:
+            pickle.dump(self.papers, file)
+
+    def load_papers(self):
+        try:
+            with open("papers.pkl", "rb") as file:
+                self.papers = pickle.load(file)
+                print("Loaded papers")
+        except FileNotFoundError:
+            self.papers = []
+
     def add_paper(self, pdf_path: str):
+        if any(paper.ref == pdf_path for paper in self.papers):
+            print(f"Paper already added: {pdf_path}")
+            return
         text = self.extract_text_from_pdf(pdf_path)
         if text:
             paper = self.parse_paper(pdf_path, text)
             self.papers.append(paper)
+            self._save_papers()
             self._update_embeddings()
 
     def _create_embedding(self, text: str) -> np.ndarray:
@@ -76,6 +93,7 @@ class ResearchRAGSystem:
         try:
             with open(self.embeddings_path, "rb") as file:
                 self.embeddings = pickle.load(file)
+                print("Loaded embeddings")
         except FileNotFoundError:
             self.embeddings = None
 

@@ -1,4 +1,5 @@
 data
 poc/embeddings.pkl
+poc/papers.pkl
 poc/out.txt
 __pycache__/
