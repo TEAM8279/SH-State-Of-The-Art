@@ -1,1 +1,4 @@
 data
+poc/embeddings.pkl
+poc/out.txt
+__pycache__/
